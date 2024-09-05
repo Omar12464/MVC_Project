@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.DAL.Data
 {
-    internal class AppDbContext:DbContext
+    public class AppDbContext:DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
+        {
+            
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.; DataBase=C42_MVC; Trusted_Connection=True; MultipleActiveResultSets = True"); 
+            optionsBuilder.UseSqlServer(); 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
