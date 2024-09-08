@@ -15,8 +15,8 @@ namespace MVC_Project.BAL.Repossotiries
         private readonly AppDbContext _dbContext;
         public DepartmentRepo(AppDbContext dbContext)
         {
-            //_dbContext = new AppDbContext();
-            
+            _dbContext = dbContext;
+
         }
         public int Add(Department department)
         {
@@ -33,7 +33,7 @@ namespace MVC_Project.BAL.Repossotiries
 
         public IEnumerable<Department> GetAll()
         {
-            return _dbContext.Departments.AsNoTracking().ToList();
+            return _dbContext.Departments.ToList();
 
         }
 

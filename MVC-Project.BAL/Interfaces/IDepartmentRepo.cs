@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BAL.Interfaces
 {
-    internal interface IDepartmentRepo
+    public interface IDepartmentRepo
     {
         IEnumerable<Department> GetAll();
         Department GetById(int id);

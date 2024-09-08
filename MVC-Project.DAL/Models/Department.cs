@@ -15,6 +15,7 @@ namespace MVC_Project.DAL.Models
         [Required(ErrorMessage = "Name is required")]
 
         public string Name { get; set; }
+        [Display(Name ="Date Of Creation")]
         public DateTime HiringDate { get; set; }
     }
 }

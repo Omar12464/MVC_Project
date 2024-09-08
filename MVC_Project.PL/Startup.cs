@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using MVC_Project.BAL.Interfaces;
+using MVC_Project.BAL.Repossotiries;
 using MVC_Project.DAL.Data;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,7 @@ namespace MVC_Project.PL
                 //Options.UseSqlServer(b => b.MigrationsAssembly("MVC_Project.PL"));
             }/*DbContextObject : ServiceLifetime.Scoped,OptionObject:ServiceLifetime.Scoped*/
             );
+            services.AddScoped<IDepartmentRepo, DepartmentRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +64,7 @@ namespace MVC_Project.PL
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }
