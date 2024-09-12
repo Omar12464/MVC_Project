@@ -13,6 +13,9 @@ namespace MVC_Project.DAL.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).IsRequired();
+            builder.Property(d => d.Id).UseIdentityColumn(2, 10);
             builder.Property(E => E.Salary).HasColumnType("decimal(18,2)");
             builder.Property(E => E.gender)
                     .HasConversion(

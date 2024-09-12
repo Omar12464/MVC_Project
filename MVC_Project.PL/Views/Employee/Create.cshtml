@@ -1,0 +1,32 @@
+﻿@model Employee
+@{
+}
+
+<h1>Create New Employee</h1>
+<br />
+<br />
+<br />
+<br />
+<form asp-action="Create">
+    <partial name="PartialViews/Create_EditEmployeePartial"></partial>
+
+    <input type="submit" value="Create" class="btn btn-primary" />
+    <a asp-action="Index" class=" btn btn-light">Back to List</a>
+    <div>
+@*         <label class="col-form-label" asp-for="Id"></label>
+        <input asp-for="Id" class="form-control" />
+        <span asp-validation-for="Id" class="text-danger"></span> *@
+    </div>
+
+
+
+</form>
+
+@section ValidateSection
+{
+   @*  <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script> *@
+    <partial name="_ValidationScriptsPartial"></partial>
+}
+
+

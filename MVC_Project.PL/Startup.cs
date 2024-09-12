@@ -36,6 +36,7 @@ namespace MVC_Project.PL
             }/*DbContextObject : ServiceLifetime.Scoped,OptionObject:ServiceLifetime.Scoped*/
             );
             services.AddScoped<IDepartmentRepo, DepartmentRepo>();
+            services.AddScoped<IEmployeeRepo, EmployeeRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

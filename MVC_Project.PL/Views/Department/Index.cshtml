@@ -28,23 +28,7 @@
                     <td>@departmwent.Code</td>
                     <td>@departmwent.Name</td>
                     <td>@departmwent.HiringDate</td>
-                    <td>
-                        <a  asp-action="Details" asp-route-id="@departmwent.Id" class="btn btn-primary">
-                            <i class="fas fa-eye"></i> Details
-                        </a>
-                    </td>
-
-                    <td>
-                         <a asp-action="Edit" asp-route-id="@departmwent.Id" class="btn btn-success">
-                            <i class="fas fa-edit"></i> Update
-                        </a>
-                    </td>
-
-                    <td>
-                        <a asp-action="Delete" asp-route-id="@departmwent.Id" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Delete
-                        </a>
-                    </td>
+                    <partial name="_ButtonsPartial" model="@departmwent.Id"></partial>
                 </tr>
 
             }

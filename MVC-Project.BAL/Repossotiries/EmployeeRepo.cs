@@ -9,44 +9,17 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BAL.Repossotiries
 {
-    public class EmployeeRepo : IEmployeeRepo
+    public class EmployeeRepo : GenericRepo<Employee> ,IEmployeeRepo
     {
-        private readonly AppDbContext _dbContext;
-        public EmployeeRepo(AppDbContext dbContext)
+        //private readonly AppDbContext _dbContext;
+        public EmployeeRepo(AppDbContext appDbContext):base(appDbContext)
         {
-            _dbContext = dbContext;
-
-        }
-        public int Add(Employee employee)
-        {
-            _dbContext.Employees.Add(employee);
-            return _dbContext.SaveChanges();
+            //_dbContext = appDbContext;
         }
 
-        public int Delete(Employee employee)
+        public IQueryable<Employee> GetEmployeeAddress(string address)
         {
-            _dbContext.Employees.Remove(employee);
-            return _dbContext.SaveChanges();
-
-        }
-
-        public IEnumerable<Employee> GetAll()
-        {
-            return _dbContext.Employees.ToList();
-
-        }
-
-        public Employee GetById(int id)
-        {
-            return
-            _dbContext.Employees.Find(id);
-        }
-
-        public int Update(Employee employee)
-        {
-            _dbContext.Employees.Update(employee);
-            return _dbContext.SaveChanges();
-
+            return _context.Employees.Where(E => E.Address.ToLower().Contains(address.ToLower()));
         }
     }
 }

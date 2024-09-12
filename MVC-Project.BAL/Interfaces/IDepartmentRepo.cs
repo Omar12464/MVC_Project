@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BAL.Interfaces
 {
-    public interface IDepartmentRepo
+    public interface IDepartmentRepo:IGenericRepo<Department>
     {
-        IEnumerable<Department> GetAll();
-        Department GetById(int id);
-        int Add(Department department);
-        int Update(Department department);
-        int Delete(Department department);
     }
 }
