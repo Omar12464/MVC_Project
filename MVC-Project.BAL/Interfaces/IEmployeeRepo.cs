@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BAL.Interfaces
 {
-    public interface IEmployeeRepo
+    public interface IEmployeeRepo : IGenericRepo<Employee>
     {
-        IEnumerable<Employee> GetAll();
-        Employee GetById(int id);
-        int Add(Employee employee);
-        int Update(Employee employee);
-        int Delete(Employee employee);
+       public IQueryable<Employee> GetEmployeeAddress(string address);
     }
 }

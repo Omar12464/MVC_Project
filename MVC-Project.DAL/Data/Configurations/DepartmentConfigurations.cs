@@ -13,6 +13,8 @@ namespace MVC_Project.DAL.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
+            builder.HasKey(d => d.Id);
+            builder.Property(d => d.Id).IsRequired();
             builder.Property(d => d.Id).UseIdentityColumn(10, 10);
 
         }

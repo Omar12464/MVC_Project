@@ -24,9 +24,8 @@ namespace MVC_Project.DAL.Models
 
         FullTime = 2
     }
-    public class Employee
+    public class Employee : ModelBase
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "Name is required")]
         [MaxLength(100)]
         public string Name { get; set; }

@@ -10,44 +10,15 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BAL.Repossotiries
 {
-    public class DepartmentRepo : IDepartmentRepo
+    public class DepartmentRepo : GenericRepo<Department>,IDepartmentRepo
     {
-        private readonly AppDbContext _dbContext;
-        public DepartmentRepo(AppDbContext dbContext)
+        //private readonly AppDbContext _dbContext;
+        public DepartmentRepo(AppDbContext dbContext):base(dbContext)
         {
-            _dbContext = dbContext;
-
-        }
-        public int Add(Department department)
-        {
-            _dbContext.Departments.Add(department);
-            return _dbContext.SaveChanges();
-        }
-
-        public int Delete(Department department)
-        {
-            _dbContext.Departments.Remove(department);
-            return _dbContext.SaveChanges();
+            //_dbContext = dbContext;
 
         }
 
-        public IEnumerable<Department> GetAll()
-        {
-            return _dbContext.Departments.ToList();
 
-        }
-
-        public Department GetById(int id)
-        {
-            return 
-            _dbContext.Departments.Find(id);
-        }
-
-        public int Update(Department department)
-        {
-            _dbContext.Departments.Update(department);
-            return _dbContext.SaveChanges();
-
-        }
     }
 }
