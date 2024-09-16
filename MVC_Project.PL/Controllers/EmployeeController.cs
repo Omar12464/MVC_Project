@@ -9,13 +9,15 @@ namespace MVC_Project.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        public EmployeeController(IEmployeeRepo repo, IWebHostEnvironment env)
+        public EmployeeController(IEmployeeRepo repo, IWebHostEnvironment env/*IDepartmentRepo departmentRepo*/)
         {
             EmployeeRepo = repo;
             _env = env;
+            //_departmentRepo = departmentRepo;
         }
         private readonly IEmployeeRepo EmployeeRepo;
         private  readonly IWebHostEnvironment _env;
+        //private readonly IDepartmentRepo _departmentRepo;
 
         [HttpGet]
         public IActionResult Index()
@@ -33,6 +35,7 @@ namespace MVC_Project.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            //ViewData["Departments"]=_departmentRepo.GetAll();
             return View();
         }
         [HttpPost]
@@ -56,6 +59,7 @@ namespace MVC_Project.PL.Controllers
                 return BadRequest();
             }
             var Employee = EmployeeRepo.GetById(id.Value);
+            //ViewData["Departments"] = _departmentRepo.GetAll();
             if (Employee == null)
             {
                 return NotFound();
