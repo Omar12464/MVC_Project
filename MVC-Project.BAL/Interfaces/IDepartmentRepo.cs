@@ -9,5 +9,6 @@ namespace MVC_Project.BAL.Interfaces
 {
     public interface IDepartmentRepo:IGenericRepo<Department>
     {
+        public IQueryable<Department> GetDepartmentName(string searchInp);
     }
 }

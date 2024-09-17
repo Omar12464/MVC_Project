@@ -1,4 +1,16 @@
-﻿@model IEnumerable<Employee>;
+﻿@model IEnumerable<EmployeeViewModel>
+<div class="row justify-content-center align-items-center mt-5">
+    <form class="row col-8 offset-2" asp-action="Index">
+        <div class="col-8">
+            <input type="text" class="form-control" name="searchInp" placeholder="Search By Name"/>
+
+        </div>
+        <div>
+            <input type="submit" value="search" class="btn btn-success" />
+        </div>
+
+    </form>
+</div>
 
 
 <h1>All Employees</h1>
@@ -16,6 +28,7 @@
                 <th>@Html.DisplayNameFor(D => D.Name)</th>
                 <th>@Html.DisplayNameFor(D => D.Age)</th>
                 <th>@Html.DisplayNameFor(D => D.Address)</th>
+                <th>@Html.DisplayNameFor(D => D.department)</th>
                 <th>@Html.DisplayNameFor(D => D.Salary)</th>
                 <th>@Html.DisplayNameFor(D => D.Emp_type)</th>
                 <th>@Html.DisplayNameFor(D => D.IsActive)</th>
@@ -33,6 +46,7 @@
                     <td>@departmwent.Name</td>
                     <td>@departmwent.Age</td>
                     <td>@departmwent.Address</td>
+                    <td>@departmwent.department?.Name</td>
                     <td >@Html.DisplayFor(M=>departmwent.Salary)</td>
                     <td>@Html.DisplayFor(M => departmwent.Emp_type)</td>
                     <td>@Html.DisplayFor(M => departmwent.IsActive)</td>

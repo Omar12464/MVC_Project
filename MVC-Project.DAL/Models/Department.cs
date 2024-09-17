@@ -16,5 +16,7 @@ namespace MVC_Project.DAL.Models
         public string Name { get; set; }
         [Display(Name ="Date Of Creation")]
         public DateTime HiringDate { get; set; }
+
+        public ICollection<Employee> EmpId { get; set; } = new HashSet<Employee>();
     }
 }

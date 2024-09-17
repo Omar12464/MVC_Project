@@ -1,4 +1,5 @@
-﻿using MVC_Project.BAL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MVC_Project.BAL.Interfaces;
 using MVC_Project.DAL.Data;
 using MVC_Project.DAL.Models;
 using System;
@@ -32,6 +33,12 @@ namespace MVC_Project.BAL.Repossotiries
 
         public IEnumerable<T> GetAll()
         {
+            if (typeof(T) == typeof(Employee))
+            {
+                return(IEnumerable<T>) _context.Set<Employee>().Include(E=>E.department).ToList();
+
+            }
+            else
             return _context.Set<T>().ToList();
         }
 

@@ -10,5 +10,6 @@ namespace MVC_Project.BAL.Interfaces
     public interface IEmployeeRepo : IGenericRepo<Employee>
     {
        public IQueryable<Employee> GetEmployeeAddress(string address);
+        public IQueryable<Employee> GetEmployeeName(string name);
     }
 }

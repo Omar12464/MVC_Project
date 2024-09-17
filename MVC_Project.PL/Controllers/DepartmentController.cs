@@ -19,16 +19,17 @@ namespace MVC_Project.PL.Controllers
         private readonly IDepartmentRepo DepartmentRepo;
         private readonly IWebHostEnvironment _env;
 
-        [HttpGet]
-        public IActionResult Index()
+        //[HttpGet]
+        public IActionResult Index(string searchInp)
         {
-            var departments=DepartmentRepo.GetAll();
-            if (departments == null)
+            if (string.IsNullOrEmpty(searchInp))
             {
-                return NotFound();
+                var departments = DepartmentRepo.GetAll();
+                return View(departments);
             }
             else
             {
+                var departments= DepartmentRepo.GetDepartmentName(searchInp.ToLower());
                 return View(departments);
             }
         }

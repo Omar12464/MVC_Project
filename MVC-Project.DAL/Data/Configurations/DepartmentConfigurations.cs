@@ -16,6 +16,7 @@ namespace MVC_Project.DAL.Data.Configurations
             builder.HasKey(d => d.Id);
             builder.Property(d => d.Id).IsRequired();
             builder.Property(d => d.Id).UseIdentityColumn(10, 10);
+            builder.HasMany(d => d.EmpId).WithOne(e=>e.department).OnDelete(DeleteBehavior.Cascade);
 
         }
     }

@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using MVC_Project.DAL.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
-namespace MVC_Project.DAL.Models
+namespace MVC_Project.PL.View_Models
 {
-   public enum Gender
+
+    public enum Gender
     {
-        [EnumMember(Value ="Male")]
-        Male=1,
-        [EnumMember(Value ="Female")]
-            Feail=2
+        [EnumMember(Value = "Male")]
+        Male = 1,
+        [EnumMember(Value = "Female")]
+        Feail = 2
     }
     public enum EmpType
     {
@@ -25,25 +23,26 @@ namespace MVC_Project.DAL.Models
 
         FullTime = 2
     }
-    public class Employee : ModelBase
+    public class EmployeeViewModel:ModelBase
     {
-        [Required(ErrorMessage = "Name is required")]
-        [MaxLength(100)]
+        public int Id { get; set; }
         public string Name { get; set; }
         public int? Age { get; set; }
         public string Address { get; set; }
+        [DataType(DataType.Currency)]
+
         public decimal Salary { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
-    
+        [Display(Name = "Hire Date")]
         public DateTime HireDate { get; set; }
         public bool IsDeleted { get; set; }
         public Gender gender { get; set; }
         public EmpType Emp_type { get; set; }
         public int? DeptId { get; set; }
-        [ForeignKey(nameof(DeptId))]
 
         public Department department { get; set; }
 
     }
 }
+

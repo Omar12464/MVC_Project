@@ -1,46 +1,72 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MVC_Project.BAL.Interfaces;
 using MVC_Project.DAL.Models;
+using MVC_Project.PL.View_Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace MVC_Project.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        public EmployeeController(IEmployeeRepo repo, IWebHostEnvironment env)
+        public EmployeeController(IEmployeeRepo repo, IWebHostEnvironment env/*IDepartmentRepo departmentRepo*/,IMapper mapper)
         {
             EmployeeRepo = repo;
             _env = env;
+            _mapper = mapper;
+            //_departmentRepo = departmentRepo;
         }
         private readonly IEmployeeRepo EmployeeRepo;
         private  readonly IWebHostEnvironment _env;
+        private readonly IMapper _mapper;
 
-        [HttpGet]
-        public IActionResult Index()
+        //private readonly IDepartmentRepo _departmentRepo;
+
+        //[HttpGet]
+        public IActionResult Index(string searchInp)
         {
-            var Employees = EmployeeRepo.GetAll();
-            if (Employees == null)
-            {
-                return NotFound();
+            if (string.IsNullOrEmpty(searchInp)) {
+                var Employees = EmployeeRepo.GetAll();
+                var mapp = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel> >(Employees);
+                return View(mapp);
             }
             else
             {
-                return View(Employees);
+                var Employees = EmployeeRepo.GetEmployeeName(searchInp.ToLower());
+                var mapp = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(Employees);
+                return View(mapp);
             }
-        }
+         }
         [HttpGet]
         public IActionResult Create()
         {
+            //ViewData["Departments"]=_departmentRepo.GetAll();
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeViewModel employee)
         {
             if (ModelState.IsValid)
             {
-                var count = EmployeeRepo.Add(employee);
+                #region Manual Mapping
+                //var map = new Employee()
+                //{
+                //    Name = employee.Name,
+                //    Id = employee.Id,
+                //    Age = employee.Age,
+                //    Address = employee.Address,
+                //    Salary = employee.Salary,
+                //    Email = employee.Email,
+                //    IsActive = employee.IsActive,
+                //    HireDate = employee.HireDate,
+                //}; 
+                #endregion
+                var map=_mapper.Map<EmployeeViewModel,Employee>(employee);
+                var count = EmployeeRepo.Add(map);
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -56,6 +82,7 @@ namespace MVC_Project.PL.Controllers
                 return BadRequest();
             }
             var Employee = EmployeeRepo.GetById(id.Value);
+            //ViewData["Departments"] = _departmentRepo.GetAll();
             if (Employee == null)
             {
                 return NotFound();
@@ -73,7 +100,7 @@ namespace MVC_Project.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee Employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel Employee)
         {
             if (id != Employee.Id)
             {
@@ -85,7 +112,8 @@ namespace MVC_Project.PL.Controllers
             }
             try
             {
-                EmployeeRepo.Update(Employee);
+                var employee =_mapper.Map<EmployeeViewModel, Employee>(Employee);
+                EmployeeRepo.Update(employee);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -107,11 +135,12 @@ namespace MVC_Project.PL.Controllers
             return Details(id, "Delete");
         }
         [HttpPost]
-        public IActionResult Delete(Employee Employee)
+        public IActionResult Delete(EmployeeViewModel Employee)
         {
             try
             {
-                EmployeeRepo.Delete(Employee);
+                var emp=_mapper.Map<EmployeeViewModel, Employee>(Employee);
+                EmployeeRepo.Delete(emp);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
