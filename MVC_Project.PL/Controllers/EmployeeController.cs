@@ -19,19 +19,19 @@ namespace MVC_Project.PL.Controllers
         private  readonly IWebHostEnvironment _env;
         //private readonly IDepartmentRepo _departmentRepo;
 
-        [HttpGet]
-        public IActionResult Index()
+        //[HttpGet]
+        public IActionResult Index(string searchInp)
         {
-            var Employees = EmployeeRepo.GetAll();
-            if (Employees == null)
-            {
-                return NotFound();
+            if (string.IsNullOrEmpty(searchInp)) {
+                var Employees = EmployeeRepo.GetAll();
+                return View(Employees);
             }
             else
             {
+                var Employees = EmployeeRepo.GetEmployeeName(searchInp.ToLower());
                 return View(Employees);
             }
-        }
+         }
         [HttpGet]
         public IActionResult Create()
         {

@@ -21,5 +21,10 @@ namespace MVC_Project.BAL.Repossotiries
         {
             return _context.Employees.Where(E => E.Address.ToLower().Contains(address.ToLower()));
         }
+
+        public IQueryable<Employee> GetEmployeeName(string name)
+        {
+            return _context.Employees.Where(e=>e.Name.ToLower().Contains(name.ToLower()));
+        }
     }
 }

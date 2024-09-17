@@ -19,6 +19,9 @@ namespace MVC_Project.BAL.Repossotiries
 
         }
 
-
+        public IQueryable<Department> GetDepartmentName(string searchInp)
+        {
+           return _context.Departments.Where(d=>d.Name.ToLower() == searchInp.ToLower());
+        }
     }
 }
