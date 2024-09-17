@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using MVC_Project.BAL.Interfaces;
 using MVC_Project.BAL.Repossotiries;
 using MVC_Project.DAL.Data;
+using MVC_Project.PL.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,7 @@ namespace MVC_Project.PL
             );
             services.AddScoped<IDepartmentRepo, DepartmentRepo>();
             services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+            services.AddAutoMapper(M=>M.AddProfile(new MappingProfile()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
