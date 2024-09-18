@@ -1,11 +1,11 @@
 ﻿@model Employee
-@inject IDepartmentRepo _departmentRepo
+@inject IUnitOfWork _unitofwork
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     // ViewData["Departments"] = _departmentRepo;
-    var departments = new SelectList(_departmentRepo.GetAll(), nameof(Department.Id), nameof(Department.Name));
+    var departments = new SelectList(_unitofwork.employee.GetAll(), nameof(Department.Id), nameof(Department.Name));
 }
 <div>
     <label class="col-form-label" asp-for="Name"></label>

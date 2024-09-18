@@ -19,16 +19,14 @@ namespace MVC_Project.BAL.Repossotiries
         {
             _context = dbContext;
         }
-        public int Add(T item)
+        public void Add(T item)
         {
             _context.Set<T>().Add(item);
-            return _context.SaveChanges();
         }
 
-        public int Delete(T item)
+        public void Delete(T item)
         {
             _context.Remove(item);
-            return _context.SaveChanges();
         }
 
         public IEnumerable<T> GetAll()
@@ -47,10 +45,9 @@ namespace MVC_Project.BAL.Repossotiries
             return _context.Set<T>().Find(id);
         }
 
-        public int Update(T item)
+        public void Update(T item)
         {
             _context.Set<T>().Update(item);
-            return _context.SaveChanges();
         }
     }
 }
