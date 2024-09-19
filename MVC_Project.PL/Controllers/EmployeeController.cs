@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MVC_Project.BAL.Interfaces;
 using MVC_Project.DAL.Models;
+using MVC_Project.PL.Helper;
 using MVC_Project.PL.View_Models;
 using System;
 using System.Collections;
@@ -66,7 +67,10 @@ namespace MVC_Project.PL.Controllers
                 //    HireDate = employee.HireDate,
                 //}; 
                 #endregion
-                var map=_mapper.Map<EmployeeViewModel,Employee>(employee);
+               employee.ImageName= DocumentSetting.Upload(employee.Image, "Images");
+                var map=_mapper.Map< EmployeeViewModel,Employee>(employee);
+                _unitOfWork.employee.Add(map);
+                _unitOfWork.complete();
                 var count = _unitOfWork.complete();
                 if (count > 0)
                 {
@@ -90,9 +94,9 @@ namespace MVC_Project.PL.Controllers
                 return NotFound();
 
             }
+            var map=_mapper.Map<EmployeeViewModel>(Employee);
 
-
-            return View(Employee);
+            return View(map);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -102,19 +106,20 @@ namespace MVC_Project.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, EmployeeViewModel Employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel Employees)
         {
-            if (id != Employee.Id)
+            if (id != Employees.Id)
             {
                 return BadRequest();
             }
             if (!ModelState.IsValid)
             {
-                return View(Employee);
+                return View(Employees);
             }
             try
             {
-                var employee =_mapper.Map<EmployeeViewModel, Employee>(Employee);
+                Employees.ImageName = DocumentSetting.Upload(Employees.Image, "Images");
+                var employee =_mapper.Map<EmployeeViewModel,Employee>(Employees);
                 _unitOfWork.employee.Update(employee);
                 _unitOfWork.complete();
                 return RedirectToAction(nameof(Index));
@@ -129,7 +134,7 @@ namespace MVC_Project.PL.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "An Error occured during update");
                 }
-                return View(Employee);
+                return View(Employees);
             }
         }
         [HttpGet]
@@ -145,10 +150,12 @@ namespace MVC_Project.PL.Controllers
                 var emp=_mapper.Map<EmployeeViewModel, Employee>(Employee);
                 _unitOfWork.employee.Delete(emp);
                 _unitOfWork.complete();
+                DocumentSetting.DeleteFile(Employee.ImageName, "Images");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
+
                 if (_env.IsDevelopment())
                 {
                     ModelState.AddModelError(string.Empty, ex.Message);

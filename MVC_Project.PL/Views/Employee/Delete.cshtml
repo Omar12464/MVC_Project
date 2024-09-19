@@ -1,4 +1,4 @@
-﻿@model Employee
+﻿@model EmployeeViewModel
 @{
     ViewData["Title"] = "Delete";
 }
@@ -10,7 +10,7 @@
 
 <form asp-action="Delete" asp-route-id="@Model.Id">
     <partial name="PartialViews/DeleteDeleteEmployeePartial"></partial>
-
+    <input type="hidden" asp-for="ImageName" />
     <input type="submit"value="Delete" class="btn btn-danger" />
     <a asp-action="Index" class="btn btn-light mt-5">Cancel</a>
 

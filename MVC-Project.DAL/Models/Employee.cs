@@ -40,10 +40,12 @@ namespace MVC_Project.DAL.Models
         public bool IsDeleted { get; set; }
         public Gender gender { get; set; }
         public EmpType Emp_type { get; set; }
+        public string ImageName { get; set; }
         public int? DeptId { get; set; }
         [ForeignKey(nameof(DeptId))]
 
         public Department department { get; set; }
+        
 
     }
 }
