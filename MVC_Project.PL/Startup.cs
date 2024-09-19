@@ -39,6 +39,7 @@ namespace MVC_Project.PL
             services.AddScoped<IDepartmentRepo, DepartmentRepo>();
             services.AddScoped<IEmployeeRepo, EmployeeRepo>();
             services.AddAutoMapper(M=>M.AddProfile(new MappingProfile()));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

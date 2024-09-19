@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MVC_Project.BAL.Interfaces;
 using MVC_Project.DAL.Models;
+using MVC_Project.PL.Helper;
 using MVC_Project.PL.View_Models;
 using System;
 using System.Collections;
@@ -13,14 +14,15 @@ namespace MVC_Project.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        public EmployeeController(IEmployeeRepo repo, IWebHostEnvironment env/*IDepartmentRepo departmentRepo*/,IMapper mapper)
+        public EmployeeController(IUnitOfWork unitOfWork, IWebHostEnvironment env/*IDepartmentRepo departmentRepo*/,IMapper mapper)
         {
-            EmployeeRepo = repo;
+            _unitOfWork = unitOfWork;
             _env = env;
             _mapper = mapper;
             //_departmentRepo = departmentRepo;
         }
-        private readonly IEmployeeRepo EmployeeRepo;
+        //private readonly IEmployeeRepo EmployeeRepo;
+        private readonly IUnitOfWork _unitOfWork;
         private  readonly IWebHostEnvironment _env;
         private readonly IMapper _mapper;
 
@@ -30,13 +32,13 @@ namespace MVC_Project.PL.Controllers
         public IActionResult Index(string searchInp)
         {
             if (string.IsNullOrEmpty(searchInp)) {
-                var Employees = EmployeeRepo.GetAll();
+                var Employees = _unitOfWork.employee.GetAll();
                 var mapp = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel> >(Employees);
                 return View(mapp);
             }
             else
             {
-                var Employees = EmployeeRepo.GetEmployeeName(searchInp.ToLower());
+                var Employees = _unitOfWork.employee.GetEmployeeName(searchInp.ToLower());
                 var mapp = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(Employees);
                 return View(mapp);
             }
@@ -65,8 +67,11 @@ namespace MVC_Project.PL.Controllers
                 //    HireDate = employee.HireDate,
                 //}; 
                 #endregion
-                var map=_mapper.Map<EmployeeViewModel,Employee>(employee);
-                var count = EmployeeRepo.Add(map);
+               employee.ImageName= DocumentSetting.Upload(employee.Image, "Images");
+                var map=_mapper.Map< EmployeeViewModel,Employee>(employee);
+                _unitOfWork.employee.Add(map);
+                _unitOfWork.complete();
+                var count = _unitOfWork.complete();
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -81,16 +86,17 @@ namespace MVC_Project.PL.Controllers
             {
                 return BadRequest();
             }
-            var Employee = EmployeeRepo.GetById(id.Value);
+            var Employee = _unitOfWork.employee.GetById(id.Value);
+            _unitOfWork.complete();
             //ViewData["Departments"] = _departmentRepo.GetAll();
             if (Employee == null)
             {
                 return NotFound();
 
             }
+            var map=_mapper.Map<EmployeeViewModel>(Employee);
 
-
-            return View(Employee);
+            return View(map);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -100,20 +106,22 @@ namespace MVC_Project.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, EmployeeViewModel Employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel Employees)
         {
-            if (id != Employee.Id)
+            if (id != Employees.Id)
             {
                 return BadRequest();
             }
             if (!ModelState.IsValid)
             {
-                return View(Employee);
+                return View(Employees);
             }
             try
             {
-                var employee =_mapper.Map<EmployeeViewModel, Employee>(Employee);
-                EmployeeRepo.Update(employee);
+                Employees.ImageName = DocumentSetting.Upload(Employees.Image, "Images");
+                var employee =_mapper.Map<EmployeeViewModel,Employee>(Employees);
+                _unitOfWork.employee.Update(employee);
+                _unitOfWork.complete();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -126,7 +134,7 @@ namespace MVC_Project.PL.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "An Error occured during update");
                 }
-                return View(Employee);
+                return View(Employees);
             }
         }
         [HttpGet]
@@ -140,11 +148,14 @@ namespace MVC_Project.PL.Controllers
             try
             {
                 var emp=_mapper.Map<EmployeeViewModel, Employee>(Employee);
-                EmployeeRepo.Delete(emp);
+                _unitOfWork.employee.Delete(emp);
+                _unitOfWork.complete();
+                DocumentSetting.DeleteFile(Employee.ImageName, "Images");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
+
                 if (_env.IsDevelopment())
                 {
                     ModelState.AddModelError(string.Empty, ex.Message);
