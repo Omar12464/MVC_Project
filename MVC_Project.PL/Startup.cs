@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Options;
 using MVC_Project.BAL.Interfaces;
 using MVC_Project.BAL.Repossotiries;
 using MVC_Project.DAL.Data;
+using MVC_Project.DAL.Models;
 using MVC_Project.PL.Helper;
 using System;
 using System.Collections.Generic;
@@ -40,6 +42,17 @@ namespace MVC_Project.PL
             services.AddScoped<IEmployeeRepo, EmployeeRepo>();
             services.AddAutoMapper(M=>M.AddProfile(new MappingProfile()));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddIdentity<ApplicationUser, IdentityRole>
+                (
+                  config =>
+                  {
+                      config.Password.RequiredUniqueChars = 2;
+                      config.Password.RequireDigit = true;
+                      config.Lockout.MaxFailedAccessAttempts = 3;
+                      config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(4);
+                  }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +72,7 @@ namespace MVC_Project.PL
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
