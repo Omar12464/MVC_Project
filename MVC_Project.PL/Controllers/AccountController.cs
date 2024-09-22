@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Project.DAL.Models;
+using MVC_Project.PL.Helper;
 using MVC_Project.PL.View_Models;
 using MVC_Project.PL.View_Models.Signup;
 using System.Threading.Tasks;
@@ -86,5 +87,68 @@ namespace MVC_Project.PL.Controllers
             return RedirectToAction(nameof(SignIn));
         }
         #endregion
+        #region ForegetPassword
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+		public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel viewModel)
+		{
+            if (ModelState.IsValid)
+            {
+                var user=await _userManager.FindByEmailAsync(viewModel.Email);
+                if (user is not null)
+                {
+                    var token=await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var ResetLink = Url.Action("ResetPassword", "Account", new {email=viewModel.Email, token = token });
+                    var email = new Email()
+                    {
+                        Subject = "Reset Your Password",
+                        Recipiant = viewModel.Email,
+                        Body = ResetLink
+                    };
+                    EmailSettingd.SendEmail(email);
+                    return RedirectToAction(nameof(CheckYourInbox));
+                }
+                ModelState.AddModelError(string.Empty, "Invalid Email");
+            }
+            return View(viewModel);
+		}
+        public IActionResult CheckYourInbox()
+        {
+            return View();
+        }
+
+        public IActionResult ResetPassword(string email,string token)
+        {
+            TempData["email"] = email;
+			TempData["token"] = token;
+
+			return View();
+        }
+        [HttpPost]
+		public async Task <IActionResult> ResetPassword(ResetPasswordViewModel viewModel)
+		{
+            if (ModelState.IsValid)
+            {
+                string email = TempData["email"] as string;
+				string token = TempData["token"] as string;
+                var user= await _userManager.FindByEmailAsync(email);
+                var result=await _userManager.ResetPasswordAsync(user, token,viewModel.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(SignIn));
+                }
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item.Description);
+                }
+			}
+            return View(viewModel);
+		}
+        #endregion
+
     }
 }

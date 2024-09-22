@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "CheckYourInbox";
+    Layout = "~/Views/Shared/AuthLayOut.cshtml";
+}
+
+<h1>CheckYourInbox</h1>
+
+<div class="main-agileinfo">
+	@* 	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	*@	<div class="agileits-top">
+		<div>
+			<p>Password Reset Link Sent to your email, Check It Please</p>
+		</div>
+		<div>
+			<a href="https://mail.google.com/mail/u/0/#inbox"></a>
+		</div>
+		</div>
+</div>
+
+@section ValidateSection
+{
+	@*  <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script> *@
+	<partial name="_ValidationScriptsPartial"></partial>
+}
