@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using MVC_Project.PL.View_Models.Signup
+@model SignUpViewModel
+@{
+	ViewData["Title"] = "SignUpViewModel";
+    Layout = "~/Views/Shared/AuthLayOut.cshtml";
+}
+
+<h1>SignUp</h1>
+
+<div class="main-agileinfo">
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	<div class="agileits-top">
+		<form asp-action="SignUp" method="post">
+			<input class="text email" asp-for="Email" placeholder="Email" required="">
+			@Html.ValidationMessageFor(model=>model.Email,"",new {@class="text-danger"})
+			<input class="text w3lpass" asp-for=Password placeholder="Password" required="">
+			@Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+			<input class="text w3lpass" asp-for="ConfirmPassword" placeholder="Confirm Password" required="">
+			@Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+			<div class="wthree-text">
+				<label class="anim">
+					<input asp-for="IsAgree" class="checkbox" required="">
+					<span>I Agree To The Terms & Conditions</span>
+				</label>
+				<div class="clear"> </div>
+			</div>
+			<input type="submit" value="SignUp">
+		</form>
+		<p>Do you have an Account? <a asp-action="SignIn"> Login Now!</a></p>
+	</div>
+</div>
+
+@section ValidateSection
+{
+	@*  <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script> *@
+	<partial name="_ValidationScriptsPartial"></partial>
+}
+
+
