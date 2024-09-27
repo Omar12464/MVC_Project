@@ -17,5 +17,7 @@ namespace MVC_Project.PL.View_Models
         {
             Id=Guid.NewGuid().ToString();
         }
+
+
     }
 }
