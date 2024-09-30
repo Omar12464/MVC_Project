@@ -1,0 +1,30 @@
+﻿@model UserViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // ViewData["Departments"] = _departmentRepo;
+}
+<div>
+    <label class="col-form-label" asp-for="FName"></label>
+    <input type="text" asp-for="FName" class="form-control" />
+    <span asp-validation-for="FName" class="text-danger"></span>
+</div>
+<div>
+    <label class="col-form-label" asp-for="LName"></label>
+    <input type="text" asp-for="LName" class="form-control" />
+    <span asp-validation-for="LName" class="text-danger"></span>
+</div>
+
+<div>
+    <label class="col-form-label" asp-for="Email"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div>
+    <label class="col-form-label" asp-for="Roles"></label>
+    <input asp-for="Roles" class="form-control" />
+    <span asp-validation-for="Roles" class="text-danger"></span>
+</div>
+
+
